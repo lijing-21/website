@@ -1,16 +1,15 @@
 ---
 title: "Apache APISIX 扩展指南"
 author: "罗泽轩"
-authorURL: "https://github.com/spacewander"
-authorImageURL: "https://avatars.githubusercontent.com/u/4161644?v=4"
-date: 2021-10-29
+href: "https://github.com/spacewander"
+avatar: "https://avatars.githubusercontent.com/u/4161644?v=4"
+date: "2021-10-29"
 keywords: 
 - Apache APISIX
 - Plugin
 - HTTP
 - Apache
 description: 本文提供了 Apache APISIX 的拓展指南，旨在为用户提供拓展 Apache APISIX 的一些思路。
-tags: technology
 ---
 
 > 本文提供了 Apache APISIX 的拓展指南，旨在为用户提供拓展 Apache APISIX 的一些思路。
