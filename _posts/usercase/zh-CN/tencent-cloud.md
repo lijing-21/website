@@ -59,7 +59,7 @@ Apache APISIX 在存储依赖和路由规则这两方面做的非常好，很适
 
 ![网关架构](https://static.apiseven.com/202108/1631781850656-4235a4e8-2792-48ae-9c98-b4d75628a476.jpg)
 
-智能钛机器学习平台的业务部署在腾讯云 TKE 平台上。为了提高它的可用性，网关、 etcd 等都是集群化的部署。智能钛机器学习平台没有使用 Apache APISIX 的 dashboard，而是直接通过 Admin API 进行交互，直接写到 etcd 里面。
+智能钛机器学习平台的业务部署在腾讯云 TKE 平台上。为了提高它的可用性，网关、 etcd 等都是集群化的部署。智能钛机器学习平台没有使用 Apache APISIX 的 Dashboard，而是直接通过 Admin API 进行交互，直接写到 etcd 里面。
 
 ![增加插件处理](https://static.apiseven.com/202108/1631781876752-faf1b7d0-abbb-4313-879c-e00d2b28334a.jpg)
 
