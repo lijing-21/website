@@ -98,7 +98,7 @@ end
 2. `service_name`: 服务名称。
 3. `discovery_args`: 不同的 discovery 特定的参数，Nacos 的特定参数包括：`namespace_id` 和  `group_name`。
 
-Nacos discovery 对应的 Lua 代码位于 `discovery/nacos.lua`。打开`nacos.lua`这个文件，我们可以看到它里面实现了几个所需的方法。
+Nacos discovery 对应的 Lua 代码位于 `discovery/nacos.lua`。打开 `nacos.lua` 这个文件，我们可以看到它里面实现了几个所需的方法。
 
 一个 discovery 需要实现至少两个方法：`nodes` 和 `init_worker` 。
 
@@ -133,7 +133,7 @@ end
 
 获取到一组节点后，我们要按照负载均衡的规则来决定接下来要先尝试哪个节点。如果常用的几种负载均衡算法满足不了需求，你也可以自己实现一个负载均衡。
 
-让我们以最少连接数负载均衡为例。对应的 Lua 代码位于 `balancer/least_conn.lua`。打开`least_conn.lua` 这个文件，我们可以看到它里面实现了几个所需的方法：`new`、`get`、`after_balance` 和 `before_retry_next_priority`。
+让我们以最少连接数负载均衡为例。对应的 Lua 代码位于 `balancer/least_conn.lua`。打开 `least_conn.lua` 这个文件，我们可以看到它里面实现了几个所需的方法：`new`、`get`、`after_balance` 和 `before_retry_next_priority`。
 
 - `new` 负责做一些初始化工作。
 
@@ -184,7 +184,7 @@ end
 
 如果没有内部状态需要维护，可以直接借用固定的模板代码（上述代码中，位于省略号以外的内容）来填充 `after_balance` 和 `before_retry_next_priority` 这两个方法。
 
-选中节点之后，我们也可以通过插件的形式添加额外的逻辑。插件可以实现 `before_proxy`方法。该方法会在选中节点之后调用，我们可以在该方法里面记录当前选中的节点信息，这在 trace 里面会有用。
+选中节点之后，我们也可以通过插件的形式添加额外的逻辑。插件可以实现 `before_proxy` 方法。该方法会在选中节点之后调用，我们可以在该方法里面记录当前选中的节点信息，这在 trace 里面会有用。
 
 ## 扩展方向4：处理响应
 
@@ -203,5 +203,5 @@ end
 
 如果你感兴趣的话，可以看看这两个插件的 `log` 方法是怎么实现的：
 
-- `prometheus`插件文档：https://apisix.apache.org/zh/docs/apisix/plugins/prometheus/
-- `http-logger`插件文档：https://apisix.apache.org/zh/docs/apisix/plugins/http-logger/
+- [`prometheus` 插件文档](https://apisix.apache.org/zh/docs/apisix/plugins/prometheus/)
+- [`http-logger` 插件文档](https://apisix.apache.org/zh/docs/apisix/plugins/http-logger/)
