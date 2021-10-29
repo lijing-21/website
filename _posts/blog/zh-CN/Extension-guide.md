@@ -12,10 +12,6 @@ keywords:
 description: 本文提供了 Apache APISIX 的拓展指南，旨在为用户提供拓展 Apache APISIX 的一些思路。
 ---
 
-> 本文提供了 Apache APISIX 的拓展指南，旨在为用户提供拓展 Apache APISIX 的一些思路。
-
-<!--truncate-->
-
 Apache APISIX 提供了 50 多个插件、常用的几个负载均衡选择器，以及对主流服务发现（如 Nacos 和 DNS）的支持。API 网关和企业内部的业务紧密相关，为了满足企业的业务需求，用户通常需要在 Apache APISIX 的基础上添加一些代码，以实现业务所需的功能。如何拓展 Apache APISIX 成了许多用户的共同痛点：在保证 Apache APISIX 平稳运行的前提下，如何添加业务代码，满足实际需求？
 
 本文提供了 Apache APISIX 的拓展指南，旨在为用户提供拓展 Apache APISIX 的一些思路。由于 Apache APISIX 处于高速发展阶段，版本迭代的频率比较高，所以本文会以 Apache APISIX 的首个 LTS 版本 v2.10.0 为基础进行说明。如果你使用的 Apache APISIX 版本低于 2.10.0，可能需要结合实际情况做一些变通。另外，虽然本文只讲解了 HTTP 相关的逻辑，但是 TCP 相关的部分，大体上也较为相似。
@@ -30,7 +26,7 @@ Apache APISIX 插件的 phases 概念和 OpenResty 的 phases 概念略有不同
 
 除了执行的先后顺序外，`rewrite` 和 `access` 之间还有一个差别，就是它们之间有一个处理 `consumer` 的逻辑：
 
-```
+```Lua
  plugin.run_plugin("rewrite", plugins, api_ctx)
         if api_ctx.consumer then
             ...
@@ -42,7 +38,7 @@ Apache APISIX 插件的 phases 概念和 OpenResty 的 phases 概念略有不同
 
 Apache APISIX 里面的鉴权插件（在插件定义里面有 `type = "auth"`），需要在 `rewrite` 阶段选好 `consumer`。这里我们用 `key-auth` 插件举个例子：
 
-```
+```Lua
 local _M = {
     version = 0.1,
     priority = 2500,
@@ -84,7 +80,7 @@ end
 
 一个动态获取 Nacos 管理的节点的 Upstream 配置如下：
 
-```
+```JSON
 {
     "service_name": "APISIX-NACOS",
     "type": "roundrobin",
@@ -106,7 +102,7 @@ Nacos discovery 对应的 Lua 代码位于 `discovery/nacos.lua`。打开`nacos.
 
 一个 discovery 需要实现至少两个方法：`nodes` 和 `init_worker` 。
 
-```
+```Lua
 function _M.nodes(service_name, discovery_args)
     local namespace_id = discovery_args and
             discovery_args.namespace_id or default_namespace_id
@@ -123,7 +119,7 @@ end
 
 其中`nodes` 的函数签名已经明了地展示获取新节点所用的查询参数：`service_name` 和 `discovery_args`。每次请求时，Apache APISIX 都会用这一组查询最新的节点。该方法返回的是一个数组：
 
-```
+```Bash
 {
     {host = "xxx", port = 12100, weight = 100, priority = 0, metadata = ...},
     # priority 和 metadata 是可选的
@@ -143,18 +139,14 @@ end
 
 - `get` 负责执行选中节点的逻辑。
 
-- ```
-  after_balance
-  ```
-
-   在下面两种情况下会运行：
+- `after_balance` 在下面两种情况下会运行：
 
   - 每次重试之前（此时 before_retry 为 true）
   - 最后一次尝试之后
 
 - `before_retry_next_priority` 则是在每次尝试完当前一组同 priority 的节点，准备尝试下一组之前运行。
 
-```
+```Lua
 function _M.new(up_nodes, upstream)
     ...
 
